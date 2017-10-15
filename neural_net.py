@@ -1,5 +1,6 @@
 import sys
 import random
+import math
 import collections
 import numpy as np
 
@@ -22,8 +23,20 @@ class NeuralNet:
         print(neural_network_weight_list)
         return neural_network_weight_list
 
-    def forward_pass(self):
-        pass
+    @staticmethod
+    def sigmoid(x):
+        return 1/(1+math.exp(-x))
+
+    def forward_pass(self, neural_network_weight_list, each_instance):
+        result_matrix = collections.defaultdict(list)
+        for i in neural_network_weight_list.keys():
+            result_matrix[i].extend(np.dot(each_instance, np.transpose(neural_network_weight_list[i][0])))
+            result_sigmoid_matrix = []
+            for j in result_matrix[i]:
+                result_sigmoid_matrix.append(NeuralNet.sigmoid(j))
+        result_matrix[i] = result_sigmoid_matrix
+        each_instance = [1] + result_matrix[i]
+        return result_matrix[len(result_matrix.keys())]
 
 
 def read_data_set(input_data_set):
@@ -54,6 +67,7 @@ def main():
         number_of_neurons_in_each_hidden_layer.append(int(sys.argv[5+i]))
 
     error = 101
+    iterations = 0
 
     # print(input_data_set)
     # print(training_percentage)
@@ -113,7 +127,16 @@ def main():
     neural_network_instance = NeuralNet()
     neural_network_weight_list = neural_network_instance.assign_weights(number_of_neurons_in_each_hidden_layer, len(training_set_feature_values[0]))
 
+    i = 0
+    while iterations < maximum_iterations or error <= 0.05:
+        error = 0
 
+        for each_instance in training_set_feature_values:
+            output_matrix = neural_network_instance.forward_pass(neural_network_weight_list, each_instance)
+            output = output_matrix[0]
+
+
+        iterations = iterations + 1
 
 if __name__ == '__main__':
     main()

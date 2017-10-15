@@ -1,16 +1,26 @@
 import sys
 import random
+import collections
 import numpy as np
 
-class Neuron:
-
-    def __init__(self):
-        pass
 
 class NeuralNet:
 
     def __init__(self):
         pass
+
+    def assign_weights(self, number_of_neurons_in_each_layer, no_of_feature_values):
+        neural_network_weight_list = collections.defaultdict(list)
+        j = 1
+
+        for each_hidden_layer in number_of_neurons_in_each_layer:
+            neural_network_weight_list[j].append(np.random.uniform(-1, 1, (each_hidden_layer, no_of_feature_values)))
+            number_of_neurons_in_each_layer = each_hidden_layer + 1
+            j = j+1
+        neural_network_weight_list[j].append(np.random.uniform(-1, 1, (1, no_of_feature_values)))
+        print("================Weights====================")
+        print(neural_network_weight_list)
+        return neural_network_weight_list
 
     def forward_pass(self):
         pass
@@ -31,7 +41,8 @@ def create_x_list(input_layer):
 
 
 def main():
-    # Reading the inputs from terminal
+    # TODO: Reading the inputs from terminal
+
     input_data_set = sys.argv[1]
     training_percentage = float(sys.argv[2])
     maximum_iterations = int(sys.argv[3])
@@ -41,6 +52,8 @@ def main():
 
     for i in range(number_of_hidden_layers):
         number_of_neurons_in_each_hidden_layer.append(int(sys.argv[5+i]))
+
+    error = 101
 
     # print(input_data_set)
     # print(training_percentage)
@@ -53,14 +66,12 @@ def main():
     print(input_layer)
 
 
-    #Shuffling the input data set
+    # Shuffling the input data set
     print("===========Shuffled==========")
     random.shuffle(input_layer)
     print(input_layer)
 
-
-    #TODO: Data Splitting
-    training_set = list()
+    # TODO: Data Splitting
 
     print("No of total Instances:", len(input_layer))
 
@@ -98,6 +109,10 @@ def main():
 
     print("===============Testing Set Class Labels================")
     print(testing_set_class_label)
+
+    neural_network_instance = NeuralNet()
+    neural_network_weight_list = neural_network_instance.assign_weights(number_of_neurons_in_each_hidden_layer, len(training_set_feature_values[0]))
+
 
 
 if __name__ == '__main__':

@@ -190,7 +190,6 @@ def main():
         error = 0
         instance = 0
         for each_instance in training_set_feature_values:
-            output_network = collections.defaultdict(list)
             output_network = neural_network_instance.forward_pass(neural_network_weight_list, each_instance)
             output = output_network[len(neural_network_weight_list.keys())][0]
             neural_network_weight_list = neural_network_instance.backward_pass(learning_rate, output, training_set_class_label[instance], output_network, neural_network_weight_list, each_instance)
@@ -203,10 +202,9 @@ def main():
     error = 0
     instance = 0
     for each_instance in testing_set_feature_values:
-        output_network1 = collections.defaultdict(list)
-        output_network1 = neural_network_instance.forward_pass(neural_network_weight_list, each_instance)
-        output = output_network1[len(neural_network_weight_list.keys())][0]
-        error = error + math.pow((testing_set_feature_values[instance][0] - output), 2)
+        output_network_1 = neural_network_instance.forward_pass(neural_network_weight_list, each_instance)
+        output = output_network_1[len(neural_network_weight_list.keys())][0]
+        error += pow((testing_set_class_label[instance][0] - output), 2)
         instance += 1
     error = error / (2 * int((len(input_layer) * (float(100 - int(training_percentage)) / 100))))
     testing_error = error

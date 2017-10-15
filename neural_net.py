@@ -36,7 +36,46 @@ class NeuralNet:
                 result_sigmoid_matrix.append(NeuralNet.sigmoid(j))
         result_matrix[i] = result_sigmoid_matrix
         each_instance = [1] + result_matrix[i]
-        return result_matrix[len(result_matrix.keys())]
+        return result_matrix
+
+    def backward_pass_output_neurons(self, target_value, output, neural_network_weight_list):
+        rate_change_matrix = collections.defaultdict(list)
+        weight_change = (target_value - output) * output * (1 - output)
+        rate_changed_value = [].append(weight_change)
+        rate_change_matrix[len(neural_network_weight_list.keys())].append(rate_changed_value)
+        return rate_change_matrix
+
+    def backward_pass_hidden_layer_neurons(self, rate_change_matrix):
+        pass
+
+
+    def backward_pass(self, learning_rate, output, target_value, output_network, neural_net_weights_list, each_instance):
+        rate_change_matrix = collections.defaultdict(list)
+        neuron_number = len(neural_net_weights_list.keys())
+
+        while neuron_number >= 1:
+
+            if neuron_number == len(neural_net_weights_list.keys()):
+                rate_change_matrix = self.backward_pass_output_neurons(target_value, output, neural_net_weights_list)
+                rate_change_matrix.get(neuron_number)[0] = rate_change_matrix.get(neuron_number)[0][0];
+                neuron_number = neuron_number - 1
+            else:
+                rate_change_matrix = self.backward_pass_hidden_layer_neurons(rate_change_matrix)
+                neuron_number = neuron_number - 1
+
+        i = len(output_network.keys())-1
+        while i > 0:
+            output_network[i-1] = [1] + output_network[i-1]
+
+            if i == 1:
+                neural_net_weights_list[i][0] += np.outer(rate_change_matrix[i][0], each_instance) * learning_rate
+                i = i - 1
+            else:
+                neural_net_weights_list[i][0] += np.outer(rate_change_matrix[i][0], output_network[i-1]) * learning_rate
+                i = i - 1
+
+        return neural_net_weights_list
+
 
 
 def read_data_set(input_data_set):
@@ -68,6 +107,7 @@ def main():
 
     error = 101
     iterations = 0
+    learning_rate = 0.5
 
     # print(input_data_set)
     # print(training_percentage)
@@ -130,10 +170,11 @@ def main():
     i = 0
     while iterations < maximum_iterations or error <= 0.05:
         error = 0
-
+        instance = 0
         for each_instance in training_set_feature_values:
-            output_matrix = neural_network_instance.forward_pass(neural_network_weight_list, each_instance)
-            output = output_matrix[0]
+            output_network = neural_network_instance.forward_pass(neural_network_weight_list, each_instance)
+            output = output_network[len(neural_network_weight_list.keys())][0]
+            final_network = neural_network_instance.backward_pass(learning_rate, output, training_set_class_label[instance], output_network, neural_network_weight_list, each_instance)
 
 
         iterations = iterations + 1

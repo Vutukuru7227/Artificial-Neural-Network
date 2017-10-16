@@ -1,16 +1,21 @@
 import sys
 import pandas as pd
 import numpy as np
-
 input_data = sys.argv[1]
 output_filename = sys.argv[2]
 
-df = pd.read_csv(input_data)
 # TODO: Delete null rows
-df.dropna()
+#df = pd.read_csv(input_data)
+df = pd.read_table(input_data, sep='\t|,|:', index_col=False, header=None, engine='python')
+df.replace(to_replace='[?]', value=np.nan,inplace=True,regex=True)
+print(df.shape)
+df.dropna(inplace=True)
+print(df.shape)
+
+
 arr = np.array(df)
 
-print(len(arr[0]))
+#print(len(arr[0]))
 
 # TODO: Categorical to Numerical
 str_list = []
@@ -41,20 +46,12 @@ df = pd.DataFrame(arr)
 #print(df1)
 
 # TODO: Scaling
-
-print(arr.shape)
-print(df.mean()[2])
-print(df.std()[2])
-
-
 for i in range(len(arr)):
     for j in range(len(arr[0])):
-        print(arr[i][j])
+        #print(arr[i][j])
         arr[i][j] = (arr[i][j] - df.mean()[j]) / df.std()[j]
         break
-
-
 df = pd.DataFrame(arr)
-print(df)
+#print(df)
 
 df.to_csv(r''+output_filename, header=None, index=None)

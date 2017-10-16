@@ -19,8 +19,8 @@ class NeuralNet:
             no_of_feature_values = each_hidden_layer + 1
             j = j+1
         neural_network_weight_list[j].append(np.random.uniform(-1, 1, (1, no_of_feature_values)))
-        print("================Weights====================")
-        print(neural_network_weight_list)
+        # print("================Weights====================")
+        # print(neural_network_weight_list)
         return neural_network_weight_list
 
     @staticmethod
@@ -138,13 +138,13 @@ def main():
 
     input_layer = read_data_set(input_data_set)
     input_layer = create_x_list(input_layer)
-    print(input_layer)
+    #print(input_layer)
 
 
     # Shuffling the input data set
-    print("===========Shuffled==========")
+    #print("===========Shuffled==========")
     input = random.sample(range(0, len(input_layer)), len(input_layer))
-    print(input)
+    #print(input)
 
     # TODO: Data Splitting
     m = 0
@@ -163,20 +163,20 @@ def main():
     training_set_feature_values = training_set[:, :len(training_set[0])-1]
     training_set_class_label = training_set[:, len(training_set[0])-1:]
 
-    print("===============Training Set Feature Values================")
-    print(training_set_feature_values)
-
-    print("===============Training Set Class Labels================")
-    print(training_set_class_label)
+    # print("===============Training Set Feature Values================")
+    # print(training_set_feature_values)
+    #
+    # print("===============Training Set Class Labels================")
+    # print(training_set_class_label)
 
     testing_set_feature_values = testing_set[:, :len(testing_set[0])-1]
     testing_set_class_label = testing_set[:, len(testing_set[0])-1:]
 
-    print("===============Testing Set Feature Values================")
-    print(testing_set_feature_values)
-
-    print("===============Testing Set Class Labels================")
-    print(testing_set_class_label)
+    # print("===============Testing Set Feature Values================")
+    # print(testing_set_feature_values)
+    #
+    # print("===============Testing Set Class Labels================")
+    # print(testing_set_class_label)
 
     neural_network_instance = NeuralNet()
     neural_network_weight_list = neural_network_instance.assign_weights(number_of_neurons_in_each_hidden_layer, len(training_set_feature_values[0]))

@@ -5,7 +5,6 @@ import collections
 import numpy as np
 
 
-
 class NeuralNet:
 
     def __init__(self):
@@ -195,7 +194,7 @@ def main():
             neural_network_weight_list = neural_network_instance.backward_pass(learning_rate, output, training_set_class_label[instance], output_network, neural_network_weight_list, each_instance)
             error = error + math.pow(training_set_class_label[instance][0] - output, 2)
             instance = instance + 1
-        error = error / (2 * int((len(input_layer)) * (float(training_percentage)/100)))
+        error = error / (2 * int((len(input_layer) * (float(training_percentage)/100))))
         iterations_limit = iterations_limit - 1
     training_error = error
 
